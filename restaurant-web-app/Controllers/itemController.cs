@@ -8,19 +8,24 @@ namespace restaurant_web_app.Controllers
 {
     public class itemController : Controller
     {
-        private static DB db = new DB();
-        
+        private static DB _db;
+
+        public itemController(DB db)
+        {
+            _db = db;
+        }
+
         public ActionResult Index()
         {
             List<Item> items = new List<Item>();
-            items = db.Item.ToList();
+            items = _db.Item.ToList();
             return View(items);
         }
 
         // GET: itemController/Details/5
         public ActionResult Details(int id)
         {
-            var item = db.Item.Find(id);
+            var item = _db.Item.Find(id);
             return View(item);
         }
 
@@ -37,8 +42,8 @@ namespace restaurant_web_app.Controllers
         {
             try
             {
-                db.Item.Add(newItem);
-                db.SaveChanges();
+                _db.Item.Add(newItem);
+                _db.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -50,7 +55,7 @@ namespace restaurant_web_app.Controllers
         // GET: itemController/Edit/5
         public ActionResult Edit(int id) 
         {
-            var itemEdited = db.Item.Find(id);
+            var itemEdited = _db.Item.Find(id);
             return View(itemEdited);
         }
 
@@ -61,11 +66,11 @@ namespace restaurant_web_app.Controllers
         {
             try
             {
-                var itemOrg = db.Item.Find(itemEdited.itemID);
+                var itemOrg = _db.Item.Find(itemEdited.itemID);
                 itemOrg.Name = itemEdited.Name;
                 itemOrg.Description = itemEdited.Description;
                 itemOrg.Price = itemEdited.Price;
-                db.SaveChanges();
+                _db.SaveChanges();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -79,7 +84,7 @@ namespace restaurant_web_app.Controllers
         // GET: itemController/Delete/5
         public ActionResult Delete(int id)
         {
-            var itemDelete = db.Item.Find(id);
+            var itemDelete = _db.Item.Find(id);
 
             return View(itemDelete);
         }
@@ -91,9 +96,9 @@ namespace restaurant_web_app.Controllers
         {
             try
             {
-                var itemDeleting = db.Item.Find(id);
-                db.Item.Remove(itemDeleting);
-                db.SaveChanges();
+                var itemDeleting = _db.Item.Find(id);
+                _db.Item.Remove(itemDeleting);
+                _db.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch

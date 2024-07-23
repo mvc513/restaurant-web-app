@@ -9,11 +9,16 @@ namespace restaurant_web_app.Controllers
 {
     public class MenuController : Controller
     {
-        private static DB db = new DB();
+        private static DB _db;
+
+        public MenuController(DB db)
+        {
+            _db = db;
+        }
         // GET: MenuController 
         public ActionResult Index()
         {
-            List<Menu> menuItems = db.Menu.ToList();
+            List<Menu> menuItems = _db.Menu.ToList();
 
             return View(menuItems);
         }
@@ -21,7 +26,7 @@ namespace restaurant_web_app.Controllers
         // GET: MenuController/Details/5
         public ActionResult Details(int id)
         {
-            var menu = db.Menu.Find(id);
+            var menu = _db.Menu.Find(id);
             return View(menu);
         }
 
@@ -38,8 +43,8 @@ namespace restaurant_web_app.Controllers
         {
             try
             {
-                db.Menu.Add(newMenu);
-                db.SaveChanges();
+                _db.Menu.Add(newMenu);
+                _db.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -51,8 +56,8 @@ namespace restaurant_web_app.Controllers
         // GET: MenuController/Edit/5
         public ActionResult Edit(int id)
         {
-            var menuModification = db.Menu.Find(id);
-            var menu = db.Menu.ToList();
+            var menuModification = _db.Menu.Find(id);
+            var menu = _db.Menu.ToList();
             return View(menuModification);
         }
 
@@ -63,13 +68,13 @@ namespace restaurant_web_app.Controllers
         {
             try
             {
-                var menuOrg = db.Menu.Find(menuEdited.nrMenu);
+                var menuOrg = _db.Menu.Find(menuEdited.nrMenu);
 
                 if (menuOrg != null)
                 {
                     menuOrg.nrMenu = menuEdited.nrMenu;
                     menuOrg.titulli = menuEdited.titulli;
-                    db.SaveChanges();
+                    _db.SaveChanges();
                 }
                 else
                 {
@@ -88,7 +93,7 @@ namespace restaurant_web_app.Controllers
         // GET: MenuController/Delete/5
         public ActionResult Delete(int id)
         {
-            var menuDeleting = db.Menu.Find(id);
+            var menuDeleting = _db.Menu.Find(id);
 
             return View(menuDeleting);
         }
@@ -100,9 +105,9 @@ namespace restaurant_web_app.Controllers
         {
             try
             {
-                var menuDeleting = db.Menu.Find(id);
-                db.Menu.Remove(menuDeleting);
-                db.SaveChanges();
+                var menuDeleting = _db.Menu.Find(id);
+                _db.Menu.Remove(menuDeleting);
+                _db.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch

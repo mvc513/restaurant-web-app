@@ -1,0 +1,54 @@
+﻿@model IEnumerable<restaurant_web_app.Models.Item>
+
+@{
+    ViewData["Title"] = "Items";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th class="border-success">
+                ID
+            </th>
+            <th class="border-success">
+                Emri
+            </th>
+
+            <th class="border-danger">
+                Pershkrimi
+            </th>
+            
+            <th class="border-active">
+                Qmimi
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr class="table-striped">
+            <td>
+                @Html.DisplayFor(modelItem => item.itemID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.itemID }) |
+                @Html.ActionLink("Details", "Details", new {  id=item.itemID }) |
+                @Html.ActionLink("Delete", "Delete", new {  id=item.itemID  })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

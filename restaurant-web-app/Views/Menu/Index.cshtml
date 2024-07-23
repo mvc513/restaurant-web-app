@@ -1,0 +1,46 @@
+﻿@model IEnumerable<restaurant_web_app.Models.Menu>
+
+@{
+    ViewData["Title"] = "Menu's";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create">Krijo Menu</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.titulli)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nrMenu)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.titulli)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nrMenu)
+            </td>
+                <td>
+                    <a class="btn btn-primary" asp-action="Index" asp-controller="Item">Me Shume</a>
+                </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  id=item.nrMenu  }) |
+                @Html.ActionLink("Details", "Details", new {  id=item.nrMenu }) |
+                @Html.ActionLink("Delete", "Delete", new {  id=item.nrMenu  })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

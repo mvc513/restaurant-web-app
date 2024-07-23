@@ -27,7 +27,6 @@ namespace restaurant_web_app.Controllers
         // GET: itemController/Create
         public ActionResult Create()
         {
-            var kategorite = db.Menu;
             return View();
         }
 

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Menu's";
+    Layout = "_Layout_Admin";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -9,6 +10,7 @@
 <p>
     <a asp-action="Create">Krijo Menu</a>
 </p>
+<div class="table-responsive">
 <table class="table">
     <thead>
         <tr>
@@ -19,7 +21,8 @@
                 @Html.DisplayNameFor(model => model.nrMenu)
             </th>
             <th>
-
+            </th>
+            <th>
             </th>
         </tr>
     </thead>
@@ -44,3 +47,4 @@
 }
     </tbody>
 </table>
+</div>

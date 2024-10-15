@@ -16,7 +16,7 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.titulli)
-            </th>
+            </th> 
             <th>
                 @Html.DisplayNameFor(model => model.nrMenu)
             </th>
@@ -26,6 +26,22 @@
             </th>
         </tr>
     </thead>
+        <div class="container">
+            <div class="row" style="padding-bottom: 20px">
+                @foreach (var item in Model)
+                {
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.nrMenu</h5>
+                                <p class="card-text">@item.titulli</p>
+                                <a class="btn btn-primary" asp-action="Index" asp-controller="Item">Me Shume</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     <tbody>
 @foreach (var item in Model) {
         <tr>

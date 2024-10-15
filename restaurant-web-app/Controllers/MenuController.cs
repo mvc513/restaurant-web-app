@@ -1,27 +1,35 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using restaurant_web_app.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace restaurant_web_app.Controllers
 {
     public class MenuController : Controller
     {
-        private static DB db = new DB();
+        private readonly DB _db;
+
+        // Constructor for dependency injection
+        public MenuController(DB db)
+        {
+            _db = db;
+        }
+
         // GET: MenuController 
         public ActionResult Index()
         {
-            List<Menu> menuItems = db.Menu.ToList();
-
+            List<Menu> menuItems = _db.Menu.ToList();
             return View(menuItems);
         }
 
         // GET: MenuController/Details/5
         public ActionResult Details(int id)
         {
-            var menu = db.Menu.Find(id);
+            var menu = _db.Menu.Find(id);
+            if (menu == null)
+            {
+                return NotFound();
+            }
             return View(menu);
         }
 
@@ -36,23 +44,23 @@ namespace restaurant_web_app.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Menu newMenu)
         {
-            try
+            if (ModelState.IsValid)
             {
-                db.Menu.Add(newMenu);
-                db.SaveChanges();
+                _db.Menu.Add(newMenu);
+                _db.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(newMenu);
         }
 
         // GET: MenuController/Edit/5
         public ActionResult Edit(int id)
         {
-            var menuModification = db.Menu.Find(id);
-            var menu = db.Menu.ToList();
+            var menuModification = _db.Menu.Find(id);
+            if (menuModification == null)
+            {
+                return NotFound();
+            }
             return View(menuModification);
         }
 
@@ -61,35 +69,29 @@ namespace restaurant_web_app.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Menu menuEdited)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var menuOrg = db.Menu.Find(menuEdited.nrMenu);
+                var menuOrg = _db.Menu.Find(menuEdited.nrMenu);
 
                 if (menuOrg != null)
                 {
-                    menuOrg.nrMenu = menuEdited.nrMenu;
-                    menuOrg.titulli = menuEdited.titulli;
-                    db.SaveChanges();
+                    menuOrg.titulli = menuEdited.titulli; // Update only the title
+                    _db.SaveChanges();
+                    return RedirectToAction(nameof(Index));
                 }
-                else
-                {
-
-                    return View();
-                }
-
-                return RedirectToAction(nameof(Index));
+                return NotFound(); // Handle not found case
             }
-            catch
-            {
-                return View();
-            }
+            return View(menuEdited); // Return the view with the model state errors
         }
 
         // GET: MenuController/Delete/5
         public ActionResult Delete(int id)
         {
-            var menuDeleting = db.Menu.Find(id);
-
+            var menuDeleting = _db.Menu.Find(id);
+            if (menuDeleting == null)
+            {
+                return NotFound();
+            }
             return View(menuDeleting);
         }
 
@@ -98,17 +100,14 @@ namespace restaurant_web_app.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExecuteDelete(int id)
         {
-            try
+            var menuDeleting = _db.Menu.Find(id);
+            if (menuDeleting != null)
             {
-                var menuDeleting = db.Menu.Find(id);
-                db.Menu.Remove(menuDeleting);
-                db.SaveChanges();
+                _db.Menu.Remove(menuDeleting);
+                _db.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return NotFound();
         }
     }
 }

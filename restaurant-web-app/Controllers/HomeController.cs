@@ -7,15 +7,18 @@ namespace restaurant_web_app.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private static DB _db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, DB db)
         {
             _logger = logger;
+            _db = db; //dependecy injection design pattern
         }
 
         public IActionResult Index()
         {
-            return View();
+            var menutFundit = _db.Menu.Take(6).ToList();
+            return View(menutFundit);
         }
 
         public IActionResult Privacy()

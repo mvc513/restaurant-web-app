@@ -6,7 +6,7 @@ namespace restaurant_web_app.Models
     {
         [Key]
         public int nrMenu { get; set; }
-        public String titulli { get; set; }
+        public String titulli { get; set; } 
 
 
     }
